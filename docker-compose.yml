@@ -7,18 +7,18 @@ services:
       - "11011:11011"
     environment:
       - PORT=11011
-      - MONGO_URL=$KADIRA_MONGO_URL
-      - MONGO_SHARD_URL_one=$KADIRA_MONGO_URL
-
+      - MONGO_URL=mongodb://mongo/arm
+      - MONGO_SHARD_URL_one=mongodb://mongo/arm
   kadira-rma:
     image: vladgolubev/kadira-rma
     environment:
-      - MONGO_URL=$KADIRA_MONGO_URL
-
+      - MONGO_URL=mongodb://mongo/arm
   kadira-ui:
     image: vladgolubev/kadira-ui
     ports:
       - "4000:4000"
     environment:
-      - MONGO_URL=$KADIRA_MONGO_URL
-      - MONGO_SHARD_URL_one=$KADIRA_MONGO_URL
+      - MONGO_URL=mongodb://mongo/arm
+      - MONGO_SHARD_URL_one=mongodb://mongo/arm
+  mongo:
+    image: mongo:latest
