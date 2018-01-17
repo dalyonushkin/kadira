@@ -7,18 +7,41 @@ services:
       - "11011:11011"
     environment:
       - PORT=11011
-      - MONGO_URL=mongodb://mongo/arm
-      - MONGO_SHARD_URL_one=mongodb://mongo/arm
+      - KADIRA_MONGO_URL=mongodb://mongo:27017
+      - MONGO_URL=mongodb://mongo:27017
+      - MONGO_SHARD_URL_one=mongodb://mongo:27017
+      - MONGO_SHARD=one
+    depends_on:
+     - mongo
   kadira-rma:
-    image: vladgolubev/kadira-rma
+    image: dkoo761/kadira-rma
     environment:
-      - MONGO_URL=mongodb://mongo/arm
+      - MONGO_SHARD=one
+      - KADIRA_MONGO_URL=mongodb://mongo:27017
+      - MONGO_URL=mongodb://mongo:27017
+    depends_on:
+     - mongo
+
   kadira-ui:
     image: vladgolubev/kadira-ui
     ports:
       - "4000:4000"
     environment:
-      - MONGO_URL=mongodb://mongo/arm
-      - MONGO_SHARD_URL_one=mongodb://mongo/arm
+      - KADIRA_MONGO_URL=mongodb://mongo:27017
+      - MONGO_SHARD=one
+      - MONGO_URL=mongodb://mongo:27017
+      - MONGO_SHARD_URL_one=mongodb://mongo:27017
+    depends_on:
+     - mongo
   mongo:
     image: mongo:latest
+    ports:
+     - "27137:27017"
+    volumes:
+     - ./mongodb:/data/db
+  mongo-express:
+    image: mongo-express:latest
+    depends_on:
+     - mongo
+    ports:
+     - "8120:8081"     
